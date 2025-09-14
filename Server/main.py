@@ -1,4 +1,4 @@
-from database import SessionLocal, engine, base
+from database import engine, base
 from fastapi import FastAPI
 from routes import user
 
