@@ -1,12 +1,11 @@
-# controllers/user.py
 from sqlalchemy.orm import Session
 from fastapi import Depends, HTTPException
 import bcrypt
-import schemas
+from schemas import user as user_schemas
 from models.user import User
 from database import get_db
 
-def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+def create_user(user: user_schemas.UserCreate, db: Session = Depends(get_db)):
     db_user = db.query(User).filter(User.email == user.email).first()
     if db_user:
         raise HTTPException(status_code=400, detail="Email already registered")
@@ -38,7 +37,7 @@ def get_user_by_id(user_id: int, db: Session = Depends(get_db)):
     return user
 
 
-def update_user(user_id: int, updated_data: schemas.UserCreate, db: Session = Depends(get_db)):
+def update_user(user_id: int, updated_data: user_schemas.UserCreate, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=400, detail="User not found")
@@ -64,4 +63,4 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
     
     db.delete(user)
     db.commit()
-    return {"message": "deleted Successfully"}
+    return {"message": "User Deleted Successfully"}
